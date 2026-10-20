@@ -41,7 +41,7 @@ This project demonstrates API testing using Postman, JavaScript test scripts, an
 postman-api-testing-suite/
 ├── README.md
 ├── postman/
-│   └── jsonplaceholder-api-tests.postman_collection.json
+│   └── Public API Testing Suite.postman_collection.json
 └── test-data/
     └── post-test-data.json
 ```
