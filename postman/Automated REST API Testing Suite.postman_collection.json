@@ -1,0 +1,316 @@
+{
+  "info": {
+    "_postman_id": "6a3f99ef-bae1-4a3d-aed1-4f9c1987f3ca",
+    "name": "Automated REST API Testing Suite",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "_exporter_id": "59076644",
+    "_collection_link": "https://go.postman.co/collection/59076644-6a3f99ef-bae1-4a3d-aed1-4f9c1987f3ca?source=collection_link"
+  },
+  "item": [
+    {
+      "name": "GET Valid Post",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "pm.test(\"Status code is 200\", function () {",
+              "    pm.response.to.have.status(200);",
+              "});",
+              "",
+              "pm.test(\"Response contains the expected post\", function () {",
+              "    const data = pm.response.json();",
+              "",
+              "    pm.expect(data.id).to.eql(1);",
+              "    pm.expect(data.title).to.be.a(\"string\");",
+              "    pm.expect(data.body).to.be.a(\"string\");",
+              "});",
+              "pm.test(\"Post data has valid fields\", function () {",
+              "    const data = pm.response.json();",
+              "",
+              "    pm.expect(data.id).to.be.a(\"number\");",
+              "    pm.expect(data.userId).to.be.a(\"number\");",
+              "    pm.expect(data.title).to.be.a(\"string\").and.not.empty;",
+              "    pm.expect(data.body).to.be.a(\"string\").and.not.empty;",
+              "});",
+              "pm.test(\"Response time is under 1000 ms\", function () {",
+              "    pm.expect(pm.response.responseTime).to.be.below(1000);",
+              "});",
+              "const data = pm.response.json();",
+              "",
+              "pm.collectionVariables.set(\"postTitle\", data.title);",
+              "pm.collectionVariables.set(\"postBody\", data.body);"
+            ],
+            "type": "text/javascript",
+            "packages": {},
+            "requests": {}
+          }
+        }
+      ],
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "https://jsonplaceholder.typicode.com/posts/1",
+          "protocol": "https",
+          "host": [
+            "jsonplaceholder",
+            "typicode",
+            "com"
+          ],
+          "path": [
+            "posts",
+            "1"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "GET Filtered Data",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "pm.test(\"Status code is 200\", function () {",
+              "    pm.response.to.have.status(200);",
+              "});",
+              "",
+              "pm.test(\"All posts belong to user 1\", function () {",
+              "    const data = pm.response.json();",
+              "",
+              "    pm.expect(data).to.be.an(\"array\");",
+              "    pm.expect(data.length).to.be.above(0);",
+              "",
+              "    data.forEach(function (post) {",
+              "        pm.expect(post.userId).to.eql(1);",
+              "    });",
+              "});"
+            ],
+            "type": "text/javascript",
+            "packages": {},
+            "requests": {}
+          }
+        }
+      ],
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "https://jsonplaceholder.typicode.com/posts?userId=1",
+          "protocol": "https",
+          "host": [
+            "jsonplaceholder",
+            "typicode",
+            "com"
+          ],
+          "path": [
+            "posts"
+          ],
+          "query": [
+            {
+              "key": "userId",
+              "value": "1"
+            }
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "GET Invalid Endpoint",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "pm.test(\"Invalid endpoint returns 404\", function () {",
+              "    pm.response.to.have.status(404);",
+              "});"
+            ],
+            "type": "text/javascript",
+            "packages": {},
+            "requests": {}
+          }
+        }
+      ],
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "https://jsonplaceholder.typicode.com/invalid-endpoint",
+          "protocol": "https",
+          "host": [
+            "jsonplaceholder",
+            "typicode",
+            "com"
+          ],
+          "path": [
+            "invalid-endpoint"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "POST",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "pm.test(\"Status code is 201\", function () {",
+              "    pm.response.to.have.status(201);",
+              "});",
+              "",
+              "pm.test(\"Response contains the submitted post\", function () {",
+              "    const data = pm.response.json();",
+              "",
+              "    pm.expect(data.title).to.eql(\"API Testing Practice\");",
+              "    pm.expect(data.body).to.eql(\"Testing a POST request in Postman\");",
+              "    pm.expect(data.userId).to.eql(1);",
+              "});",
+              "",
+              "pm.test(\"Response contains a generated ID\", function () {",
+              "    const data = pm.response.json();",
+              "",
+              "    pm.expect(data.id).to.exist;",
+              "});"
+            ],
+            "type": "text/javascript",
+            "packages": {},
+            "requests": {}
+          }
+        }
+      ],
+      "request": {
+        "method": "POST",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"title\": \"API Testing Practice\",\n  \"body\": \"Testing a POST request in Postman\",\n  \"userId\": 1\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "https://jsonplaceholder.typicode.com/posts",
+          "protocol": "https",
+          "host": [
+            "jsonplaceholder",
+            "typicode",
+            "com"
+          ],
+          "path": [
+            "posts"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "GET Cross-Endpoint",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "const data = pm.response.json();",
+              "",
+              "pm.test(\"Post 1 is consistent across endpoints\", function () {",
+              "    const post = data.find(function (item) {",
+              "        return item.id === 1;",
+              "    });",
+              "",
+              "    pm.expect(post).to.exist;",
+              "",
+              "    const savedTitle = pm.collectionVariables.get(\"postTitle\");",
+              "    const savedBody = pm.collectionVariables.get(\"postBody\");",
+              "",
+              "    pm.expect(post.title).to.eql(savedTitle);",
+              "    pm.expect(post.body).to.eql(savedBody);",
+              "});"
+            ],
+            "type": "text/javascript",
+            "packages": {},
+            "requests": {}
+          }
+        }
+      ],
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "https://jsonplaceholder.typicode.com/posts",
+          "protocol": "https",
+          "host": [
+            "jsonplaceholder",
+            "typicode",
+            "com"
+          ],
+          "path": [
+            "posts"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "GET Data Driven",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "",
+              "pm.test(\"Response matches requested post ID\", function () {",
+              "    const data = pm.response.json();",
+              "",
+              "    pm.response.to.have.status(200);",
+              "    pm.expect(data.id).to.eql(Number(pm.iterationData.get(\"postId\")));",
+              "    pm.expect(data.userId).to.be.a(\"number\");",
+              "    pm.expect(data.title).to.be.a(\"string\").and.not.empty;",
+              "    pm.expect(data.body).to.be.a(\"string\").and.not.empty;",
+              "});",
+              ""
+            ],
+            "type": "text/javascript",
+            "packages": {},
+            "requests": {}
+          }
+        }
+      ],
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "https://jsonplaceholder.typicode.com/posts/{{postId}}",
+          "protocol": "https",
+          "host": [
+            "jsonplaceholder",
+            "typicode",
+            "com"
+          ],
+          "path": [
+            "posts",
+            "{{postId}}"
+          ]
+        }
+      },
+      "response": []
+    }
+  ],
+  "variable": [
+    {
+      "key": "postTitle",
+      "value": ""
+    },
+    {
+      "key": "postBody",
+      "value": ""
+    }
+  ]
+}
